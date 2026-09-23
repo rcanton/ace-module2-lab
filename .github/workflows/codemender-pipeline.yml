@@ -54,14 +54,14 @@ permissions:
 env:
   # Scoped scan target. Kept well under cm's ~10 MB per-scan upload limit and
   # contains the canonical CRITICAL finding (SQL injection in routes/login.ts).
-  SCAN_PATH: routes/login.ts
+  SCAN_PATH: routes
   # The `cm` binary ships vendored in the repo, so template copies work with
   # zero extra setup (GitHub does NOT copy Releases on fork/template — a
   # release-download step here broke every student copy).
   CM_BUNDLED: lab/bin/cm-linux
   # How many of the top-ranked HIGH/CRITICAL findings to auto-remediate in one
   # run (all land in a single PR). Set to 1 for a minimal single-fix lab.
-  CM_FIX_LIMIT: "3"
+  CM_FIX_LIMIT: "1"
 
 jobs:
   codemender-security:
@@ -203,7 +203,7 @@ jobs:
           branch: codemender/auto-remediation
           delete-branch: true
           add-paths: |
-            routes/**
+            ${{ env.SCAN_PATH }}/**
           commit-message: |
             fix(security): CodeMender autonomous remediation
 
